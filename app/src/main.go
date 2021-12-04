@@ -16,8 +16,11 @@ func main() {
 
 	router.Get("/hello", handler.Hello)
 
+	log.Print("Starting server")
 	err := http.ListenAndServe(":8080", router)
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	log.Print("Shutting server down")
 }
