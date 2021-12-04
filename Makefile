@@ -15,7 +15,7 @@ run:
 
 .PHONY: build
 build:
-	go build -o ./builded_app ./app/src/main.go
+	go build -o ./build/builded_app ./app/src/main.go
 
 
 .PHONY: fmt
