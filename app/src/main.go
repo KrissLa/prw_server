@@ -1,10 +1,21 @@
 package main
 
 import (
-	"fmt"
-	"prw_server/app/pkg/hello"
+	"github.com/go-chi/chi/v5"
+	"log"
+	"net/http"
+	"prw_server/app/pkg/handlers"
 )
 
 func main() {
-	fmt.Println(hello.World())
+	handler := handlers.NewHandler()
+
+	router := chi.NewRouter()
+
+	router.Get("/hello", handler.Hello)
+
+	err := http.ListenAndServe(":8080", router)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
