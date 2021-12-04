@@ -21,3 +21,13 @@ build:
 .PHONY: fmt
 fmt:
 	go fmt ./...
+
+
+.PHONY: up
+up:
+	docker-compose up --build --remove-orphans --abort-on-container-exit -t 0 app
+
+
+.PHONY: down
+down:
+	docker-compose down --remove-orphans -t 0
