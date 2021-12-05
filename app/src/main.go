@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"prw_server/app/pkg/api/jokes"
 	"syscall"
 	"time"
 
@@ -14,6 +13,7 @@ import (
 	"github.com/ilyakaznacheev/cleanenv"
 
 	"prw_server/app/config"
+	"prw_server/app/pkg/api/jokes"
 	"prw_server/app/pkg/handlers"
 )
 
@@ -36,7 +36,7 @@ func main() {
 	path := cfg.Host + ":" + cfg.Port
 
 	server := &http.Server{
-		Addr: path,
+		Addr:    path,
 		Handler: router,
 	}
 
