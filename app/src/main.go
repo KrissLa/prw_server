@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"prw_server/app/pkg/api/jokes"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/ilyakaznacheev/cleanenv"
@@ -17,7 +18,10 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	handler := handlers.NewHandler()
+
+	apiClient := jokes.NewJokeClient(cfg.JokeURL)
+
+	handler := handlers.NewHandler(apiClient)
 
 	router := chi.NewRouter()
 

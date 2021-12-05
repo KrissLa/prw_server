@@ -9,6 +9,12 @@ import (
 
 const apiPath = "api?format=json"
 
+func NewJokeClient(baseUrl string) *JokeClient {
+	return &JokeClient{
+		url: baseUrl,
+	}
+}
+
 type JokeClient struct {
 	url string
 }
@@ -20,7 +26,7 @@ func (j *JokeClient) GetJoke() (*api.JokeResponse, error) {
 	if err != nil {
 		return nil, err
 	} else if response.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("API request error: %v", err)
+		return nil, fmt.Errorf("API request status: %s", http.StatusText(response.StatusCode))
 	}
 
 	var data api.JokeResponse
@@ -32,4 +38,3 @@ func (j *JokeClient) GetJoke() (*api.JokeResponse, error) {
 
 	return &data, nil
 }
-
