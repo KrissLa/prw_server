@@ -1,9 +1,14 @@
 package main
 
 import (
+	"context"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
 	"prw_server/app/pkg/api/jokes"
+	"syscall"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/ilyakaznacheev/cleanenv"
@@ -13,6 +18,7 @@ import (
 )
 
 func main() {
+
 	cfg := config.Server{}
 	err := cleanenv.ReadConfig("config.yml", &cfg)
 	if err != nil {
@@ -29,11 +35,27 @@ func main() {
 
 	path := cfg.Host + ":" + cfg.Port
 
-	log.Print("Starting server")
-	err = http.ListenAndServe(path, router)
-	if err != nil {
-		log.Fatal(err)
+	server := &http.Server{
+		Addr: path,
+		Handler: router,
 	}
+
+	quit := make(chan os.Signal, 1)
+	done := make(chan error, 1)
+
+	signal.Notify(quit, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+
+	go func() {
+		<-quit
+		ctx, _ := context.WithTimeout(context.Background(), time.Minute)
+
+		done <- server.Shutdown(ctx)
+	}()
+
+	log.Print("Starting server")
+	_ = server.ListenAndServe()
+
+	err = <-done
 
 	log.Print("Shutting server down")
 }
