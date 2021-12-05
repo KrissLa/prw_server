@@ -49,7 +49,8 @@ func main() {
 		<-quit
 		ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 		defer cancel()
-		done <- server.Shutdown(ctx)
+		err = server.Shutdown(ctx)
+		done <- err
 	}()
 
 	log.Print("Starting server")
